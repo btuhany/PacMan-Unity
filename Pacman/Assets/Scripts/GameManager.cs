@@ -4,17 +4,19 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] Ghost[] _ghostsArray;
     [SerializeField] Pacman _pacman;
-    [SerializeField] Transform[] _pellets;
+    [SerializeField] Transform _pellets;
+    [SerializeField] int _ghostMultiplier = 1;
+    [SerializeField] float _powerModeDuration = 8f;
 
     bool _isGameOn;
     public static GameManager Instance;
+    public int Score { get; private set; }
+    public int Lives { get; private set; }
     private void Awake()
     {
         Instance = this;
+       
     }
-
-    public int Score { get; private set; }
-    public int Lives { get; private set; }
 
     private void Start()
     {
@@ -33,10 +35,11 @@ public class GameManager : MonoBehaviour
             if(!pellet.gameObject.activeSelf)
                 pellet.gameObject.SetActive(true);
         }
-        ResetPositions();
+        ResetAllStates();
     }
-    void ResetPositions()
+    void ResetAllStates()
     {
+        ResetGhostMultiplier();
         foreach (Ghost ghost in _ghostsArray)
         {
             ghost.gameObject.SetActive(true);
@@ -65,9 +68,10 @@ public class GameManager : MonoBehaviour
         _isGameOn = false;
     }
 
-    public void GhostEaten()
+    public void GhostEaten(Ghost ghost)
     {
-
+        IncreaseScore(_ghostMultiplier * ghost.Point);
+        _ghostMultiplier++;
     }
     public void PacmanEaten()
     {
@@ -75,12 +79,56 @@ public class GameManager : MonoBehaviour
         SetLives(this.Lives - 1);
         if(Lives > 0)
         {
-            Invoke(nameof(ResetPositions), 2.5f);
+            Invoke(nameof(ResetAllStates), 2.5f);
         }
         else
         {
             GameOver();
         }
     }
-    
+    public void PowerPelletEaten()
+    {
+        //TODO
+        CancelInvoke();
+        Invoke(nameof(ResetGhostMultiplier), _powerModeDuration);
+    }
+    bool IsThereAnyPelletLeft()
+    {
+        foreach (Transform pellet in _pellets)
+        {
+            if (pellet.gameObject.activeSelf)
+            {
+
+                return true;
+            }
+
+        }
+        return false;
+    }
+    public void IsGameEnded()
+    {
+        if (!IsThereAnyPelletLeft())
+        {
+            _pacman.gameObject.SetActive(false);
+            Debug.Log("bitti");
+            Invoke(nameof(NewRound), 3f);
+        }
+
+    }
+    private void ResetGhostMultiplier()
+    {
+        _ghostMultiplier = 1;
+    }
+    public void DebugPellet()
+    {
+        foreach (Transform pellet in _pellets)
+        {
+            if (pellet.gameObject.activeSelf)
+            {
+                Debug.Log(pellet.name);
+            
+            }
+
+        }
+    }
 }

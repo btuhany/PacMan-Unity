@@ -22,6 +22,9 @@ public class Pacman : MonoBehaviour
         {
             _movement.SetDirection(Vector2.right);
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+            GameManager.Instance.DebugPellet();
     }
     private void OnTriggerStay2D(Collider2D collision)
     {

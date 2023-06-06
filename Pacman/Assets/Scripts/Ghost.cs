@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Ghost : MonoBehaviour
 {
-    [SerializeField] int _point = 200;
+    public int Point = 200;
     void GetEaten()
     {
-        GameManager.Instance.IncreaseScore(_point);
+        GameManager.Instance.IncreaseScore(Point);
     }
 }
