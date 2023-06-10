@@ -2,7 +2,14 @@ using UnityEngine;
 
 public class Flip : MonoBehaviour
 {
-
+    
+   SpriteRenderer _spriteRenderer;
+   [SerializeField] Sprite[] _sprites = new Sprite[4];
+   public void AssignSprite(int value) 
+   {
+        //value check
+        _spriteRenderer.sprite = _sprites[value];
+   }
    public void RotateSprite(Vector2 dir)
     {
         if (dir == Vector2.right)

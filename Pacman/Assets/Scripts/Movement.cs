@@ -2,11 +2,9 @@ using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Flip))]
 public class Movement : MonoBehaviour
 {
     [SerializeField] Rigidbody2D _rb;
-    [SerializeField] Flip _flip;
 
     [SerializeField] float _speed;
     [SerializeField] Vector2 _initialDir;
@@ -16,15 +14,16 @@ public class Movement : MonoBehaviour
     Vector3 _startPos;
     Vector2 _currentDir;
     Vector2 _nextDir;
-
+    public bool IsActive = false;
     public Vector2 CurrentDir { get => _currentDir; }
+    public event System.Action OnDirectionChanged;
 
     private void Awake()
     {
         _startPos = transform.position;
         ResetState();
     }
-    void ResetState()
+    public void ResetState()
     {
         _speedMultiplier = 1.0f;
         _currentDir = _initialDir;
@@ -34,7 +33,11 @@ public class Movement : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (!IsActive) return; 
+        
         _rb.MovePosition(_rb.position + _currentDir * _speed * _speedMultiplier * Time.fixedDeltaTime);
+        
+
     }
     public void SetDirection(Vector2 direction, bool forced = false)
     {
@@ -88,7 +91,9 @@ public class Movement : MonoBehaviour
     private void ChangeDirection(Vector2 direction)
     {
         _currentDir = direction;
-        _flip.RotateSprite(_currentDir);
         _nextDir = Vector2.zero;
+        //if(_flip)
+        //    _flip.RotateSprite(_currentDir);
+        OnDirectionChanged?.Invoke();
     }
 }

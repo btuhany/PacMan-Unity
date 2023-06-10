@@ -8,12 +8,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] int _ghostMultiplier = 1;
     [SerializeField] float _powerModeDuration = 8f;
 
-    bool _isGameOn;
+    Vector3 _pacmanInitialPos;
+    public event System.Action OnScoreChanged;
     public static GameManager Instance;
     public int Score { get; private set; }
     public int Lives { get; private set; }
     private void Awake()
     {
+        _pacmanInitialPos = _pacman.transform.position;
         Instance = this;
        
     }
@@ -24,7 +26,6 @@ public class GameManager : MonoBehaviour
     }
     void NewGame()
     {
-        _isGameOn = true;
         SetScore(0);
         SetLives(3);
     }
@@ -44,15 +45,19 @@ public class GameManager : MonoBehaviour
         {
             ghost.gameObject.SetActive(true);
         }
+        _pacman.ResetState();
+        _pacman.transform.position = _pacmanInitialPos;
         _pacman.gameObject.SetActive(true);
     }
     private void SetScore(int score)
     {
         this.Score = score;
+        OnScoreChanged?.Invoke();
     }
     public void IncreaseScore(int score)
     {
         this.Score += score;
+        OnScoreChanged?.Invoke();
     }
     void SetLives(int lives)
     {
@@ -65,7 +70,6 @@ public class GameManager : MonoBehaviour
             ghost.gameObject.SetActive(false);
         }
         _pacman.gameObject.SetActive(false);
-        _isGameOn = false;
     }
 
     public void GhostEaten(Ghost ghost)
@@ -109,8 +113,7 @@ public class GameManager : MonoBehaviour
     {
         if (!IsThereAnyPelletLeft())
         {
-            _pacman.gameObject.SetActive(false);
-            Debug.Log("bitti");
+            GameOver();
             Invoke(nameof(NewRound), 3f);
         }
 
