@@ -81,3 +81,68 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: b97167c35748db84fb4d32f4f242922a, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 106c822b8a677064d879a8806b9a9c1d, type: 3}
+--- !u!1 &8546327609327000385 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8569944772221874220, guid: 106c822b8a677064d879a8806b9a9c1d, type: 3}
+  m_PrefabInstance: {fileID: 32696122733276013}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8546327609425231524 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8569944772153431497, guid: 106c822b8a677064d879a8806b9a9c1d, type: 3}
+  m_PrefabInstance: {fileID: 32696122733276013}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8546327609786771104 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8569944770770144717, guid: 106c822b8a677064d879a8806b9a9c1d, type: 3}
+  m_PrefabInstance: {fileID: 32696122733276013}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8546327610179875442 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8569944770928892191, guid: 106c822b8a677064d879a8806b9a9c1d, type: 3}
+  m_PrefabInstance: {fileID: 32696122733276013}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8546327610179875452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccc5ff00b1a19f648b1002ac8ec50a57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &8546327610179875452 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8569944770928892177, guid: 106c822b8a677064d879a8806b9a9c1d, type: 3}
+  m_PrefabInstance: {fileID: 32696122733276013}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6278678220416347116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8546327610179875452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1da8f82de03ae9b44912a1a1d50b34ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetPacman: {fileID: 0}
+  _initialState: 4
+  _collider: {fileID: 8546327610179875454}
+  _body: {fileID: 8546327609425231524}
+  _eyes: {fileID: 8546327609327000385}
+  _blueBody: {fileID: 8546327609786771104}
+  _whiteBody: {fileID: 8546327610462438965}
+  Movement: {fileID: 8546327610179875442}
+  Point: 200
+  ScatterTarget: {x: 11.5, y: 18.5, z: 0}
+  EatenTarget: {x: 0, y: 0.7, z: 0}
+  NodeDirectionLock: 0
+--- !u!58 &8546327610179875454 stripped
+CircleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 8569944770928892179, guid: 106c822b8a677064d879a8806b9a9c1d, type: 3}
+  m_PrefabInstance: {fileID: 32696122733276013}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8546327610462438965 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8569944771176869208, guid: 106c822b8a677064d879a8806b9a9c1d, type: 3}
+  m_PrefabInstance: {fileID: 32696122733276013}
+  m_PrefabAsset: {fileID: 0}

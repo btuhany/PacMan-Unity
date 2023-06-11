@@ -15,7 +15,9 @@ public class Movement : MonoBehaviour
     Vector2 _currentDir;
     Vector2 _nextDir;
     public bool IsActive = false;
+    public bool IsStopeed => _rb.velocity == Vector2.zero;
     public Vector2 CurrentDir { get => _currentDir; }
+    public Rigidbody2D Rb { get => _rb; set => _rb = value; }
 
     public event System.Action OnDirectionChanged;
 
@@ -34,10 +36,10 @@ public class Movement : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (!IsActive) return; 
-        
-        _rb.MovePosition(_rb.position + _currentDir * _speed * _speedMultiplier * Time.fixedDeltaTime);
-        
+        if (!IsActive) return;
+
+        // _rb.MovePosition(_rb.position + _currentDir * _speed * _speedMultiplier * Time.fixedDeltaTime);
+        _rb.velocity = _currentDir * _speed * _speedMultiplier;
 
     }
     public void SetDirection(Vector2 direction, bool forced = false)
@@ -100,8 +102,31 @@ public class Movement : MonoBehaviour
     }
     public void SetNextDirection(Vector2 dir)
     {
-
         if(!IsThereObstacle(dir))  //&& !CheckIfOppositeDir(dir)
             ChangeDirection(dir);
+    }
+    public void StopMovement()
+    {
+        _rb.velocity = Vector2.zero;
+       
+    }
+    public void ChangeToOppositeDir()
+    {
+        ChangeDirection(OppositeDir());
+    }
+    public Vector2 OppositeDir()
+    {
+        Vector2 oppositeDir;
+        if (_currentDir == Vector2.right)
+            oppositeDir = Vector2.left;
+        else if (_currentDir == Vector2.left)
+            oppositeDir = Vector2.right;
+        else if (_currentDir == Vector2.up)
+            oppositeDir = Vector2.down;
+        else if (_currentDir == Vector2.down)
+            oppositeDir = Vector2.up;
+        else
+            oppositeDir = Vector2.zero;
+        return oppositeDir;
     }
 }

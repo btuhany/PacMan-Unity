@@ -44,14 +44,46 @@ public class GameManager : MonoBehaviour
         foreach (Ghost ghost in _ghostsArray)
         {
             ghost.ResetState();
+            ghost.Movement.Rb.simulated = true;
         }
-
-
-
         //TODO: _pacman.ResetState();
         _pacman.ResetState();
         _pacman.transform.position = _pacmanInitialPos;
         _pacman.gameObject.SetActive(true);
+    }
+    private void GameOver()
+    {
+        foreach (Ghost ghost in _ghostsArray)
+        {
+            ghost.StopMovement();
+        }
+        _pacman.GameFinished();
+
+    }
+
+    public void GhostEaten(Ghost ghost)
+    {
+        IncreaseScore(_ghostMultiplier * ghost.Point);
+        _ghostMultiplier++;
+    }
+    public void PacmanEaten()
+    {
+        _pacman.Eaten();
+        SetLives(this.Lives - 1);
+        foreach (Ghost ghost in _ghostsArray)
+        {
+            ghost.Movement.IsActive = false;
+            ghost.StopMovement();
+            ghost.Movement.Rb.simulated = false;
+        }
+        if (Lives > 0)
+        {
+            Invoke(nameof(ResetAllStates), 2.5f);
+        }
+        else
+        {
+            GameOver();
+        }
     }
     private void SetScore(int score)
     {
@@ -67,36 +99,13 @@ public class GameManager : MonoBehaviour
     {
         this.Lives = lives;
     }
-    private void GameOver()
-    {
-        foreach (Ghost ghost in _ghostsArray)
-        {
-            ghost.gameObject.SetActive(false);
-        }
-        _pacman.gameObject.SetActive(false);
-    }
-
-    public void GhostEaten(Ghost ghost)
-    {
-        IncreaseScore(_ghostMultiplier * ghost.Point);
-        _ghostMultiplier++;
-    }
-    public void PacmanEaten()
-    {
-        _pacman.gameObject.SetActive(false);
-        SetLives(this.Lives - 1);
-        if(Lives > 0)
-        {
-            Invoke(nameof(ResetAllStates), 2.5f);
-        }
-        else
-        {
-            GameOver();
-        }
-    }
     public void PowerPelletEaten()
     {
         //TODO
+        foreach (Ghost ghost in _ghostsArray)
+        {
+            ghost.StateMachine.ChangeState(GhostStateID.Frightened);
+        }
         CancelInvoke();
         Invoke(nameof(ResetGhostMultiplier), _powerModeDuration);
     }

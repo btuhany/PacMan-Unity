@@ -1,4 +1,6 @@
 
+using System.Numerics;
+
 public interface IGhostStates
 {
     GhostStateID StateID { get; }

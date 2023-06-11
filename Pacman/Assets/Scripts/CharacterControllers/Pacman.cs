@@ -1,15 +1,19 @@
+using System.Collections;
 using UnityEngine;
 
 public class Pacman : MonoBehaviour
 {
     [SerializeField] Movement _movement;
     [SerializeField] Flip _flip;
+    [SerializeField] Animator _anim;
+    bool _canReadInput = true;
     private void OnEnable()
     {
         _movement.OnDirectionChanged += HandleOnDirectionChanged;
     }
     private void Update()
     {
+        if (!_canReadInput) return;
         if (!_movement.IsActive && Input.anyKeyDown)
         {
             _movement.IsActive = true;
@@ -35,16 +39,44 @@ public class Pacman : MonoBehaviour
     {
         if (collision.CompareTag("Node"))
             _movement.TryNextDirection();
+
+
+        if (_movement.IsStopeed)
+            _anim.SetBool("Stop", true);
+        else
+            _anim.SetBool("Stop", false);
+
+
     }
+
     public void ResetState()
     {
+        _anim.SetBool("Reset", true);
+        _movement.Rb.simulated = true;
         _movement.ResetState();
         _flip.RotateSprite(Vector2.right);
-
-
+        _canReadInput = true;
     }
     void HandleOnDirectionChanged()
-    {
+    {  
         _flip.RotateSprite(_movement.CurrentDir);
+    }
+    public void Eaten()
+    {
+        _canReadInput = false;
+        _movement.StopMovement();
+        _movement.Rb.simulated = false;
+        _movement.IsActive = false;
+        _anim.SetTrigger("Eaten");
+    }
+    public void GameFinished()
+    {
+        _movement.StopMovement();
+        _movement.IsActive = false;
+        _anim.SetTrigger("Finished");
+    }
+    public void EatenAnimationEvent()
+    {
+        this.gameObject.SetActive(false);
     }
 }
