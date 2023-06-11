@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class GhostHome : IGhostStates
+public class GhostScatter : IGhostStates
 {
-    public GhostStateID StateID => GhostStateID.Home;
+    public GhostStateID StateID => GhostStateID.Scatter;
 
     public void Enter()
     {
@@ -14,6 +14,7 @@ public class GhostHome : IGhostStates
 
     public void Update()
     {
+        
     }
     public void OnNode(Node node)
     {

@@ -1,16 +1,22 @@
 using UnityEngine;
 
-public class GhostFrightened : GhostBehavior
+public class GhostFrightened : IGhostStates
 {
-    // Start is called before the first frame update
-    void Start()
+    public GhostStateID StateID => GhostStateID.Frightened;
+
+    public void Enter()
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Exit()
     {
-        
+    }
+
+    public void Update()
+    {
+    }
+    public void OnNode(Node node)
+    {
+
     }
 }

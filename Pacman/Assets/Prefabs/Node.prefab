@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5851633629705904958}
+  - component: {fileID: -9211527926398771050}
   - component: {fileID: 8844154658265972234}
   m_Layer: 0
   m_Name: Node
@@ -32,6 +33,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-9211527926398771050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3312152163683047423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc03249a332bc484db8c358cb2683d35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  IsLeftAvailable: 0
+  IsRightAvailable: 0
+  IsUpAvailable: 0
+  IsDownAvailable: 0
 --- !u!61 &8844154658265972234
 BoxCollider2D:
   m_ObjectHideFlags: 0

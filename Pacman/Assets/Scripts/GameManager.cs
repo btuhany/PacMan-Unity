@@ -43,8 +43,12 @@ public class GameManager : MonoBehaviour
         ResetGhostMultiplier();
         foreach (Ghost ghost in _ghostsArray)
         {
-            ghost.gameObject.SetActive(true);
+            ghost.ResetState();
         }
+
+
+
+        //TODO: _pacman.ResetState();
         _pacman.ResetState();
         _pacman.transform.position = _pacmanInitialPos;
         _pacman.gameObject.SetActive(true);

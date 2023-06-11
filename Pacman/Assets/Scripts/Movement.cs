@@ -16,6 +16,7 @@ public class Movement : MonoBehaviour
     Vector2 _nextDir;
     public bool IsActive = false;
     public Vector2 CurrentDir { get => _currentDir; }
+
     public event System.Action OnDirectionChanged;
 
     private void Awake()
@@ -68,7 +69,7 @@ public class Movement : MonoBehaviour
                 ChangeDirection(_nextDir);
         }
     }
-    private bool CheckIfOppositeDir(Vector2 direction)
+    public bool CheckIfOppositeDir(Vector2 direction)
     {
         if (_currentDir == Vector2.left && direction == Vector2.right)
         {
@@ -88,12 +89,19 @@ public class Movement : MonoBehaviour
         }
         return false;
     }
-    private void ChangeDirection(Vector2 direction)
+    public void ChangeDirection(Vector2 direction)
     {
+        if(_currentDir == direction) { _nextDir = Vector2.zero; return; }
         _currentDir = direction;
         _nextDir = Vector2.zero;
         //if(_flip)
         //    _flip.RotateSprite(_currentDir);
         OnDirectionChanged?.Invoke();
+    }
+    public void SetNextDirection(Vector2 dir)
+    {
+
+        if(!IsThereObstacle(dir))  //&& !CheckIfOppositeDir(dir)
+            ChangeDirection(dir);
     }
 }

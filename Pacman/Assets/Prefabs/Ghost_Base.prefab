@@ -158,7 +158,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a095f262a9a7c3409b9098ae118a27c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Movement: {fileID: 0}
+  _targetPacman: {fileID: 0}
+  _initialState: 0
   Point: 200
+  NodeDirectionLock: 0
 --- !u!114 &8569944770928892191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,6 +457,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8569944772221874221}
+  - component: {fileID: 3139532689262620775}
   - component: {fileID: 8569944772221874222}
   m_Layer: 0
   m_Name: Eyes
@@ -476,6 +481,25 @@ Transform:
   m_Father: {fileID: 8569944770928892185}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3139532689262620775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8569944772221874220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e58cf352cb563044b88486668a500dfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movement: {fileID: 8569944770928892191}
+  _eyeSprites:
+  - {fileID: 21300000, guid: d65aa956b7569874fab274083826a77f, type: 3}
+  - {fileID: 21300000, guid: 07ddb51374d9f19458dad756bbbcd880, type: 3}
+  - {fileID: 21300000, guid: b97167c35748db84fb4d32f4f242922a, type: 3}
+  - {fileID: 21300000, guid: 7391304e6dcdc594484288107bfd217f, type: 3}
+  _eyeSpriteRenderer: {fileID: 8569944772221874222}
 --- !u!212 &8569944772221874222
 SpriteRenderer:
   m_ObjectHideFlags: 0

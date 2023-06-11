@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class GhostHome : IGhostStates
+public class GhostEaten : IGhostStates
 {
-    public GhostStateID StateID => GhostStateID.Home;
+    public GhostStateID StateID => GhostStateID.Eaten;
 
     public void Enter()
     {
