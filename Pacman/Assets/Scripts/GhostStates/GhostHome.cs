@@ -5,6 +5,8 @@ public class GhostHome : GhostState, IGhostStates
 {
 
     public GhostStateID StateID => GhostStateID.Home;
+
+    float _timeCounter = 0;
     public GhostHome(Ghost ghost) : base(ghost)
     {
 
@@ -24,7 +26,12 @@ public class GhostHome : GhostState, IGhostStates
 
     public void Update()
     {
-
+        _timeCounter += Time.deltaTime;
+        if(_timeCounter >= _ghost.HomeExitTime)
+        {
+            _ghost.IsInHome= false;
+            _ghost.StateMachine.ChangeState(GhostStatesManager.Instance.CurrentState);
+        }
     }
     public void OnNode(Node node)
     {

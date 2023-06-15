@@ -6,8 +6,8 @@ public class GhostFrightened : GhostState, IGhostStates
 
     public GhostStateID StateID => GhostStateID.Frightened;
 
-
-
+    float timeCounter = 0;
+    const float maxTime = 6;
 
     public GhostFrightened(Ghost ghost) : base(ghost)
     {
@@ -15,38 +15,31 @@ public class GhostFrightened : GhostState, IGhostStates
 
     public void Enter()
     {
-        _ghost.ChangeDirToOpposite();
+        if(!_ghost.NodeDirectionLock)
+            _ghost.ChangeDirToOpposite();
         _ghost.FrightenedState();
+        _ghost.Movement.ChangeSpeedMultiplier(0.5f);
     }
 
     public void Exit()
     {
+        _ghost.Movement.ChangeSpeedMultiplier(1f);
     }
 
     public void Update()
     {
+        timeCounter+= Time.deltaTime;
+        if(timeCounter>=maxTime)
+        {
+            timeCounter=0;
+            _ghost.StateMachine.ChangeState(GhostStatesManager.Instance.CurrentState);
+        }
     }
     public void OnNode(Node node)
     {
         if (node.IsHomeEnterNode) return;
         if (_ghost.NodeDirectionLock) return;
-        RandomPathFinding(node);
+        _ghost.Movement.SetNextDirection(_ghost.RandomDirection(node));
     }
-    private void RandomPathFinding(Node node)
-    {
-
-        List<Vector2> currentAvailableDirections = new List<Vector2>();
-
-        foreach (Vector2 dir in node.AvailableDirections)
-        {
-            currentAvailableDirections.Add(dir);
-        }    
-          
-        for (int i = 0; i < currentAvailableDirections.Count; i++)
-        {
-            if (currentAvailableDirections[i] == _ghost.Movement.OppositeDir())
-                currentAvailableDirections.Remove(currentAvailableDirections[i]);
-        }
-        _ghost.Movement.SetNextDirection(currentAvailableDirections[Random.Range(0, currentAvailableDirections.Count)]);
-    }
+    
 }

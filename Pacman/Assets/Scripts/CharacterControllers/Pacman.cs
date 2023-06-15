@@ -7,6 +7,9 @@ public class Pacman : MonoBehaviour
     [SerializeField] Flip _flip;
     [SerializeField] Animator _anim;
     bool _canReadInput = true;
+
+    public Movement Movement { get => _movement; }
+
     private void OnEnable()
     {
         _movement.OnDirectionChanged += HandleOnDirectionChanged;

@@ -1,9 +1,9 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Ghost : MonoBehaviour
 {
-    [SerializeField] Transform _targetPacman;
+    [SerializeField] protected Pacman _targetPacman;
     [SerializeField] GhostStateID _initialState;
     [SerializeField] CircleCollider2D _collider;
 
@@ -14,9 +14,12 @@ public abstract class Ghost : MonoBehaviour
 
     public Movement Movement;
     public int Point = 200;
+
+    public bool IsInHome;
+    public float HomeExitTime;
     public virtual Vector3 ChaseTarget()
     {
-        return  _targetPacman.position;
+        return  _targetPacman.transform.position;
     }
 
     public Vector3 ScatterTarget = new Vector3(11.5f, 18.5f, 0); //blinky
@@ -25,7 +28,7 @@ public abstract class Ghost : MonoBehaviour
     public bool NodeDirectionLock = false;
     StateMachine _stateMachine;
     Vector3 _initalPos;
-    public Vector2 CurrentPos => new Vector2(transform.position.x, transform.position.y);
+    public Vector2 CurrentPos => transform.position;
 
     public StateMachine StateMachine { get => _stateMachine; }
 
@@ -144,6 +147,66 @@ public abstract class Ghost : MonoBehaviour
         _whiteBody.gameObject.SetActive(false);
 
         _collider.isTrigger = true;
+    }
+    public Vector2 MinDistanceDirection(Node node, Vector3 target)
+    {
+        float minDistance = float.MaxValue;
+        Vector2 minDistanceDir = Vector2.zero;
+        foreach (Vector2 dir in node.AvailableDirections)
+        {
+            if (Movement.OppositeDir() != dir)
+            {
+                float distance = Vector3.Distance(CurrentPos + dir, target);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    minDistanceDir = dir;
+                }
+                else if (distance == minDistance && DirectionPriority(dir) > DirectionPriority(minDistanceDir))
+                {
+                    minDistance = distance;
+                    minDistanceDir = dir;
+                }
+            }
+        }
+        return minDistanceDir;
+    }
+    public Vector2 RandomDirection(Node node)
+    {
+        List<Vector2> currentAvailableDirections = new List<Vector2>();
+
+        foreach (Vector2 dir in node.AvailableDirections)
+        {
+            currentAvailableDirections.Add(dir);
+        }
+
+        for (int i = 0; i < currentAvailableDirections.Count; i++)
+        {
+            if (currentAvailableDirections[i] == Movement.OppositeDir())
+                currentAvailableDirections.Remove(currentAvailableDirections[i]);
+        }
+        return currentAvailableDirections[Random.Range(0, currentAvailableDirections.Count)];
+    }
+    private int DirectionPriority(Vector2 direction)
+    {
+        int priority = 0;
+        if (direction == Vector2.up)
+        {
+            priority = 3;
+        }
+        else if (direction == Vector2.left)
+        {
+            priority = 2;
+        }
+        else if (direction == Vector2.down)
+        {
+            priority = 1;
+        }
+        else if (direction == Vector2.right)
+        {
+            priority = 0;
+        }
+        return priority;
     }
 
 }

@@ -129,4 +129,8 @@ public class Movement : MonoBehaviour
             oppositeDir = Vector2.zero;
         return oppositeDir;
     }
+    public void ChangeSpeedMultiplier(float multiplier)
+    {
+        _speedMultiplier = multiplier;
+    }
 }
