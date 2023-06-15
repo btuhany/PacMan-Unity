@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -29,6 +31,19 @@ public class GhostChase : GhostState, IGhostStates
         if (node.IsHomeEnterNode) return;
         if (_ghost.NodeDirectionLock) return;
         PathFinding(node, _ghost.ChaseTarget());
+    }
+    private void PathFindingNew(Node node, Vector3 target)
+    {
+        Dictionary<Vector2, float> directionsDistances = new Dictionary<Vector2, float>();
+        foreach (Vector2 dir in node.AvailableDirections)
+        {
+            if (_ghost.Movement.OppositeDir() != dir)
+            {
+                float distance = Vector3.Distance(dir * 2, target);
+                directionsDistances.Add(dir, distance);
+            }
+        }
+       
     }
     private void PathFinding(Node node, Vector3 target)
     {
