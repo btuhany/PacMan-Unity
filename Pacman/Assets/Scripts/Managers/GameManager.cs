@@ -43,9 +43,11 @@ public class GameManager : MonoBehaviour
         ResetGhostMultiplier();
         foreach (Ghost ghost in _ghostsArray)
         {
+            ghost.DefaultLook();
             ghost.ResetState();
             ghost.Movement.Rb.simulated = true;
         }
+        GhostStatesManager.Instance.ResetStates();
         //TODO: _pacman.ResetState();
         _pacman.ResetState();
         _pacman.transform.position = _pacmanInitialPos;
@@ -102,10 +104,7 @@ public class GameManager : MonoBehaviour
     public void PowerPelletEaten()
     {
         //TODO
-        foreach (Ghost ghost in _ghostsArray)
-        {
-            ghost.StateMachine.ChangeState(GhostStateID.Frightened);
-        }
+        GhostStatesManager.Instance.PowerPelletMode();
         CancelInvoke();
         Invoke(nameof(ResetGhostMultiplier), _powerModeDuration);
     }

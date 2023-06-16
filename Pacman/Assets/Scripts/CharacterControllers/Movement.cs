@@ -9,6 +9,7 @@ public class Movement : MonoBehaviour
     [SerializeField] float _speed;
     [SerializeField] Vector2 _initialDir;
     [SerializeField] LayerMask _obstacleLayer;
+    
 
     float _speedMultiplier = 1.0f;
     Vector3 _startPos;
@@ -16,8 +17,9 @@ public class Movement : MonoBehaviour
     Vector2 _nextDir;
     public bool IsActive = false;
     public bool IsStopeed => _rb.velocity == Vector2.zero;
-    public Vector2 CurrentDir { get => _currentDir; }
+    public Vector2 CurrentDir { get => _currentDir; set => _currentDir = value; }
     public Rigidbody2D Rb { get => _rb; set => _rb = value; }
+    public Vector2 NextDir { get => _nextDir; set => _nextDir = value; }
 
     public event System.Action OnDirectionChanged;
 
@@ -93,11 +95,13 @@ public class Movement : MonoBehaviour
     }
     public void ChangeDirection(Vector2 direction)
     {
-        if(_currentDir == direction) { _nextDir = Vector2.zero; return; }
+        if(_currentDir == direction)
+        { 
+            _nextDir = Vector2.zero;
+            return;
+        }
         _currentDir = direction;
         _nextDir = Vector2.zero;
-        //if(_flip)
-        //    _flip.RotateSprite(_currentDir);
         OnDirectionChanged?.Invoke();
     }
     public void SetNextDirection(Vector2 dir)
@@ -112,7 +116,11 @@ public class Movement : MonoBehaviour
     }
     public void ChangeToOppositeDir()
     {
-        ChangeDirection(OppositeDir());
+        if (!IsThereObstacle(OppositeDir()))
+        {
+            _currentDir = OppositeDir();
+            _nextDir = Vector2.zero;
+        }
     }
     public Vector2 OppositeDir()
     {

@@ -22,10 +22,8 @@ public class GhostStatesManager : MonoBehaviour
     private void Start()
     {
         _scatterTime = GetRandomScatterTime();
-        foreach (Ghost ghost in _ghostsArray)
-        {
-            ghost.StateMachine.ChangeState(_initialState);
-        }
+        _chaseTime = GetRandomChaseTime();
+        ChangeGhostStates(_initialState);
     }
     private void Update()
     {
@@ -52,6 +50,25 @@ public class GhostStatesManager : MonoBehaviour
         }
 
     }
+    public void ResetStates()
+    {
+        _scatterTime = GetRandomScatterTime();
+        _chaseTime = GetRandomChaseTime();
+        foreach (Ghost ghost in _ghostsArray)
+        {
+            if(ghost.TryGetComponent(out BlinkyGhost blinky))
+            {
+                blinky.StateMachine.ChangeState(GhostStateID.Chase);
+                continue;
+            }
+            else
+            {
+                ghost.StateMachine.ChangeState(GhostStateID.Home);
+            }
+
+        }
+        ChangeGhostStates(_initialState);
+    }
     float GetRandomScatterTime()
     {
         return Random.Range(_minScatterTime, _maxScatterTime);
@@ -64,11 +81,20 @@ public class GhostStatesManager : MonoBehaviour
     {
         foreach (Ghost ghost in _ghostsArray)
         {
-            if(ghost.IsInHome) { return; }
-            if (ghost.StateMachine.CurrentState == GhostStateID.Frightened) return;
-            Debug.Log(ghost.gameObject.name);
+            if(ghost.IsInHome) { continue; }
+            if (ghost.StateMachine.CurrentState == GhostStateID.Frightened) continue;
+            if (ghost.StateMachine.CurrentState == GhostStateID.Home) continue;
+            if (ghost.StateMachine.CurrentState == GhostStateID.Eaten) continue;
             ghost.StateMachine.ChangeState(ghostStateID);
         }
     }
-    
+
+    public void PowerPelletMode()
+    {
+        foreach (Ghost ghost in _ghostsArray)
+        {
+            if (ghost.StateMachine.CurrentState == GhostStateID.Eaten) continue;
+            ghost.StateMachine.ChangeState(GhostStateID.Frightened);
+        }
+    }
 }

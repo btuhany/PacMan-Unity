@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ public abstract class Ghost : MonoBehaviour
 
     public Movement Movement;
     public int Point = 200;
-
+    
     public bool IsInHome;
     public float HomeExitTime;
     public virtual Vector3 ChaseTarget()
@@ -23,7 +24,7 @@ public abstract class Ghost : MonoBehaviour
     }
 
     public Vector3 ScatterTarget = new Vector3(11.5f, 18.5f, 0); //blinky
-    [HideInInspector] public Vector3 EatenTarget = new Vector3(0, 0.7f);
+    [HideInInspector] public Vector3 EatenTarget = new Vector3(0, 3f, 0);
 
     public bool NodeDirectionLock = false;
     StateMachine _stateMachine;
@@ -31,9 +32,12 @@ public abstract class Ghost : MonoBehaviour
     public Vector2 CurrentPos => transform.position;
 
     public StateMachine StateMachine { get => _stateMachine; }
+    public float TimeConsumed = 0;
+    public bool IsInNode = false;
 
     private void Awake()
     {
+        GetComponent<Rigidbody2D>().sleepMode = RigidbodySleepMode2D.NeverSleep;
         _initalPos = transform.position;
         _stateMachine = new StateMachine();
         _stateMachine.RegisterState(new GhostChase(this));
@@ -105,6 +109,14 @@ public abstract class Ghost : MonoBehaviour
         if (collision.CompareTag("Node"))
         {
             NodeDirectionLock = false;
+            IsInNode = false;
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Node"))
+        {
+            IsInNode = true;
         }
     }
     private void HandleOnDirectionChanged()
@@ -177,13 +189,8 @@ public abstract class Ghost : MonoBehaviour
 
         foreach (Vector2 dir in node.AvailableDirections)
         {
-            currentAvailableDirections.Add(dir);
-        }
-
-        for (int i = 0; i < currentAvailableDirections.Count; i++)
-        {
-            if (currentAvailableDirections[i] == Movement.OppositeDir())
-                currentAvailableDirections.Remove(currentAvailableDirections[i]);
+            if(dir != Movement.OppositeDir())
+                currentAvailableDirections.Add(dir);
         }
         return currentAvailableDirections[Random.Range(0, currentAvailableDirections.Count)];
     }
@@ -207,6 +214,24 @@ public abstract class Ghost : MonoBehaviour
             priority = 0;
         }
         return priority;
+    }
+    public void StartBugCheck()
+    {
+        StopAllCoroutines();
+        StartCoroutine(PosBugControl());
+    }
+    IEnumerator PosBugControl()
+    {
+        Debug.Log("basladi");
+        Vector3 postPos = transform.position;
+        yield return new WaitForSeconds(0.5f);
+        Debug.Log(Vector3.Distance(postPos, transform.position));
+        if(Vector3.Distance(postPos, transform.position)< 1f)
+        {
+            NodeDirectionLock = false;
+            Debug.Log("bug goturuldu");
+        }
+        yield return null;
     }
 
 }

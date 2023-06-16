@@ -10,7 +10,7 @@ public class GhostEaten : GhostState, IGhostStates
     public void Enter()
     {
         _ghost.EatenStateEnter();
-        _ghost.Movement.ChangeSpeedMultiplier(3f);
+        _ghost.Movement.ChangeSpeedMultiplier(1.7f);
     }
     public void Exit()
     {
@@ -19,9 +19,10 @@ public class GhostEaten : GhostState, IGhostStates
     }
     public void Update()
     {
-        if(Vector3.Distance(_ghost.EatenTarget,_ghost.transform.position)<1f)
+        if (Vector3.Distance(_ghost.EatenTarget, _ghost.transform.position) < 1.3f)
         {
-           _ghost.StateMachine.ChangeState(GhostStateID.Chase);
+            _ghost.StateMachine.ChangeState(GhostStateID.Chase);
+            _ghost.StartBugCheck();
         }
     }
     public void OnNode(Node node)
