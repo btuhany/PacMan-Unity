@@ -222,14 +222,11 @@ public abstract class Ghost : MonoBehaviour
     }
     IEnumerator PosBugControl()
     {
-        Debug.Log("basladi");
         Vector3 postPos = transform.position;
         yield return new WaitForSeconds(0.5f);
-        Debug.Log(Vector3.Distance(postPos, transform.position));
         if(Vector3.Distance(postPos, transform.position)< 1f)
         {
             NodeDirectionLock = false;
-            Debug.Log("bug goturuldu");
         }
         yield return null;
     }
